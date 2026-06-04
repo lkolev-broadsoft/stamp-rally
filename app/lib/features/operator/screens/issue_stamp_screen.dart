@@ -39,8 +39,7 @@ class _IssueStampScreenState extends ConsumerState<IssueStampScreen> {
 
                   final token = session.issuedToken;
 
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                  return ListView(
                     children: [
                       Text(
                         session.confirmationCode ?? '----',
@@ -59,7 +58,8 @@ class _IssueStampScreenState extends ConsumerState<IssueStampScreen> {
                           icon: _issuing
                               ? const SizedBox.square(
                                   dimension: 18,
-                                  child: CircularProgressIndicator(strokeWidth: 2),
+                                  child:
+                                      CircularProgressIndicator(strokeWidth: 2),
                                 )
                               : const Icon(Icons.verified),
                           label: const Text('Issue Stamp'),
@@ -91,7 +91,6 @@ class _IssueStampScreenState extends ConsumerState<IssueStampScreen> {
                           token.toRawJson(),
                           maxLines: 4,
                         ),
-                        const Spacer(),
                         OutlinedButton.icon(
                           icon: const Icon(Icons.qr_code_scanner),
                           label: const Text('Scan Next Passport'),
@@ -114,7 +113,8 @@ class _IssueStampScreenState extends ConsumerState<IssueStampScreen> {
                   );
                 },
                 loading: () => const Center(child: CircularProgressIndicator()),
-                error: (error, stackTrace) => Text('Failed to load event: $error'),
+                error: (error, stackTrace) =>
+                    Text('Failed to load event: $error'),
               ),
             ),
           ),
