@@ -68,6 +68,7 @@ class Passport {
     required this.id,
     required this.eventId,
     required this.participantName,
+    required this.displayNonce,
     required this.stamps,
     required this.startedAt,
   });
@@ -75,6 +76,7 @@ class Passport {
   final String id;
   final String eventId;
   final String participantName;
+  final String displayNonce;
   final List<Stamp> stamps;
   final DateTime startedAt;
 
@@ -87,7 +89,9 @@ class Passport {
   }
 
   int completedCountFor(Event event) {
-    return event.checkpoints.where((checkpoint) => hasStampFor(checkpoint.id)).length;
+    return event.checkpoints
+        .where((checkpoint) => hasStampFor(checkpoint.id))
+        .length;
   }
 
   bool hasUnlockedPrize(Event event) {
@@ -98,6 +102,7 @@ class Passport {
     String? id,
     String? eventId,
     String? participantName,
+    String? displayNonce,
     List<Stamp>? stamps,
     DateTime? startedAt,
   }) {
@@ -105,6 +110,7 @@ class Passport {
       id: id ?? this.id,
       eventId: eventId ?? this.eventId,
       participantName: participantName ?? this.participantName,
+      displayNonce: displayNonce ?? this.displayNonce,
       stamps: stamps ?? this.stamps,
       startedAt: startedAt ?? this.startedAt,
     );
@@ -115,6 +121,7 @@ class Passport {
       'id': id,
       'eventId': eventId,
       'participantName': participantName,
+      'displayNonce': displayNonce,
       'stamps': stamps.map((stamp) => stamp.toJson()).toList(),
       'startedAt': startedAt.toIso8601String(),
     };
@@ -127,8 +134,13 @@ class Passport {
       id: json['id']! as String,
       eventId: json['eventId']! as String,
       participantName: json['participantName']! as String,
+      displayNonce: json['displayNonce'] as String? ?? '',
       stamps: rawStamps
-          .map((stamp) => Stamp.fromJson(Map<String, Object?>.from(stamp! as Map)))
+          .map(
+            (stamp) => Stamp.fromJson(
+              Map<String, Object?>.from(stamp! as Map),
+            ),
+          )
           .toList(growable: false),
       startedAt: DateTime.parse(json['startedAt']! as String),
     );

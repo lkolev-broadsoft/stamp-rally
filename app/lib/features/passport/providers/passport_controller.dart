@@ -15,10 +15,23 @@ final passportControllerProvider =
 });
 
 class PassportController extends StateNotifier<Passport?> {
-  PassportController(this._store) : super(_store.load());
+  PassportController(this._store) : super(_withDisplayNonce(_store.load())) {
+    final passport = state;
+    if (passport != null) {
+      unawaited(_store.save(passport));
+    }
+  }
 
   static const _uuid = Uuid();
   final PassportStore _store;
+
+  static Passport? _withDisplayNonce(Passport? passport) {
+    if (passport == null || passport.displayNonce.isNotEmpty) {
+      return passport;
+    }
+
+    return passport.copyWith(displayNonce: _uuid.v4());
+  }
 
   void joinEvent(Event event) {
     final current = state;
@@ -30,11 +43,23 @@ class PassportController extends StateNotifier<Passport?> {
       id: _uuid.v4(),
       eventId: event.id,
       participantName: 'jPrime visitor',
+      displayNonce: _uuid.v4(),
       stamps: const [],
       startedAt: DateTime.now().toUtc(),
     );
     state = passport;
     unawaited(_store.save(passport));
+  }
+
+  void rotateDisplayNonce() {
+    final passport = state;
+    if (passport == null) {
+      return;
+    }
+
+    final updatedPassport = passport.copyWith(displayNonce: _uuid.v4());
+    state = updatedPassport;
+    unawaited(_store.save(updatedPassport));
   }
 
   Future<ImportStampResult> importStamp({
@@ -100,6 +125,7 @@ class PassportController extends StateNotifier<Passport?> {
     }
 
     final updatedPassport = passport.copyWith(
+      displayNonce: _uuid.v4(),
       stamps: [
         ...passport.stamps,
         token.toStamp(importedAt: DateTime.now().toUtc()),

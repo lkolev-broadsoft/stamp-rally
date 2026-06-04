@@ -14,7 +14,8 @@ Build a demoable offline-first Flutter stamp rally app for jPrime 2026.
 6. Operator issues a signed stamp token QR.
 7. Participant scans the stamp token.
 8. Participant app verifies signature, `eventId`, `passportId`, and duplicate status.
-9. Passport progress updates and prize unlocks when enough stamps are collected.
+9. Participant app rotates the passport `displayNonce` after accepting the stamp.
+10. Passport progress updates and prize unlocks when enough stamps are collected.
 
 ## Out of Scope for Hackathon MVP
 
@@ -27,4 +28,4 @@ Build a demoable offline-first Flutter stamp rally app for jPrime 2026.
 
 ## Security Model
 
-The visual confirmation code is a UX check, not proof. The signed stamp token is the proof. The participant app trusts public keys from the event config and accepts only stamp tokens signed by the matching checkpoint/operator key.
+The visual confirmation code is a UX check, not proof. The signed stamp token is the proof. The participant app trusts public keys from the event config and accepts only stamp tokens signed by the matching checkpoint/operator key. The passport `displayNonce` is rotated when the passport QR screen opens, when the participant manually refreshes it, and after each successful stamp import.

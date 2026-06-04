@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:uuid/uuid.dart';
 
 import '../../../shared/utils/code_generator.dart';
 import '../../../shared/utils/qr_validator.dart';
@@ -17,15 +16,12 @@ class ShowPassportScreen extends ConsumerStatefulWidget {
 }
 
 class _ShowPassportScreenState extends ConsumerState<ShowPassportScreen> {
-  static const _uuid = Uuid();
-
-  late String _displayNonce;
   late Timer _timer;
 
   @override
   void initState() {
     super.initState();
-    _displayNonce = _uuid.v4();
+    ref.read(passportControllerProvider.notifier).rotateDisplayNonce();
     _timer = Timer.periodic(const Duration(seconds: 1), (_) {
       if (mounted) {
         setState(() {});
@@ -56,12 +52,10 @@ class _ShowPassportScreenState extends ConsumerState<ShowPassportScreen> {
                   : _PassportQr(
                       eventId: passport.eventId,
                       passportId: passport.id,
-                      displayNonce: _displayNonce,
-                      onRefresh: () {
-                        setState(() {
-                          _displayNonce = _uuid.v4();
-                        });
-                      },
+                      displayNonce: passport.displayNonce,
+                      onRefresh: () => ref
+                          .read(passportControllerProvider.notifier)
+                          .rotateDisplayNonce(),
                     ),
             ),
           ),
