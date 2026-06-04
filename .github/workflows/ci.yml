@@ -55,8 +55,10 @@ jobs:
       - name: Generate Flutter project files
         run: flutter create --platforms=ios .
 
-      - name: Create iOS Podfile
+      - name: Configure iOS deployment target
         run: |
+          ruby -0pi -e "gsub(/IPHONEOS_DEPLOYMENT_TARGET = [0-9.]+;/, 'IPHONEOS_DEPLOYMENT_TARGET = 15.5;')" ios/Runner.xcodeproj/project.pbxproj
+
           cat > ios/Podfile <<'RUBY'
           platform :ios, '15.5'
 
