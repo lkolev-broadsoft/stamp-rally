@@ -16,11 +16,11 @@ The project is MIT licensed and designed for a jPrime 2026 hackathon submission 
 
 ```text
 .
-├── app/                  # Flutter application
-├── docs/                 # Planning and design notes
-├── LICENSE
-├── THIRD_PARTY_NOTICES.md
-└── README.md
++-- app/                  # Flutter application
++-- docs/                 # Planning and design notes
++-- LICENSE
++-- THIRD_PARTY_NOTICES.md
++-- README.md
 ```
 
 ## Current Scope
